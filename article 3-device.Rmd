@@ -1,0 +1,449 @@
+---
+title: "Are consumer sleep trackers accurate?"
+subtitle: "A statistical comparison of 3 leading devices"
+author: "Nicholas Wisniewski"
+date: "5/8/2019"
+output: 
+  html_document:
+    theme: lumen
+    highlight: tango
+    code_folding: hide
+    toc: true
+    number_sections: true
+    toc_depth: 3
+    toc_float: 
+      collapsed: true
+      smooth_scroll: true
+abstract: "We compared 3 sleep trackers and their ability to measure total sleep, deep sleep, REM sleep, and light sleep. We found significant differences across devices for all 4 measurements. Furthermore, we found no correlation between the amount of deep sleep measured by the 3 devices, and low correlation between REM sleep measurements. We concluded that current sleep trackers are only capable of measuring total sleep."
+
+---
+
+```{r setup, include=FALSE, echo=F}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introduction
+
+Consumer sleep trackers are becoming more popular, but little is known about their accuracy. Most trackers today claim to be able to distinguish between light sleep, deep sleep, and REM sleep -- a claim that would now make it possible to quantitatively claim, among other things, whether or not you had [too much to dream last night](https://www.youtube.com/watch?v=IeVnbAfcwv8). In order to estimate the amount of agreement between the most cutting-edge trackers on the market, we compared simultaneous data taken from three sleep trackers -- the [Fitbit Charge 3](https://www.fitbit.com/charge3), [Oura Ring](https://ouraring.com/returns/) and the [Withings Sleep](https://www.withings.com/us/en/sleep). 
+
+* The Fitbit Charge 3 is the latest flagship of the established brand. It uses a green light to obtain an optical pulse waveform, which allows it to track heart rate, inter-beat-intervals, and motion. Machine learning is then used to calculate sleep stages.
+
+* The Oura Ring also measures an optical pulse waveform, and claims to detect pulse rate, inter-beat-intervals, and pulse amplitude, respiratory rate, motion, and body temperature. Machine learning is then used to calculate sleep stages.
+
+* The Withings Sleep is a mat sensor that is placed beneath the mattress. It uses ballistocardiography to detect your heart beating, respiratory rate, snoring, and any other movement. Again, nothing is known about the machine learning algorithm.
+
+At the time of evaluation, the Oura ring over twice as expensive as the others, with an asking price of $\$300$ compared to the Fitbit Charge 3 at $\$150$ and the Withings Sleep at $\$100$. Fitbit is based on San Francisco, Oura is based out of Oulu, Finland, and Withings is located in Issy-les-Moulineaux, France. 
+
+
+## Validation Studies
+
+Early sleep trackers were strictly accelerometer-based, and several  [studies](https://www.livescience.com/42710-fitness-trackers-sleep-monitoring-accuracy.html) raised concerns about accuracy. In a 2011 study, Montgomery-Downs and colleagues compared simultaneous recordings from an accelerometer-based tracker (the Fitbit) to polysomnography, finding that the Fitbit overestimated the time participants were asleep by $67 \min$ on average. A 2013 study using the Fitbit One found an opposite effect, underestimating by $109$ minutes on average in a cohort of children.
+
+A more recent review of consumer wearables, including ones that can track heart rate, was published by [Peake et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6031746/) in June 2018. They estimated that only $5\%$ of the technologies currently available have been formally validated; over half included in the review had not been independently tested. In their review of sleep trackers, only $3/21 (14\%)$ of devices had been validated: the Oura Ring (which, at the time, was not yet commercially available); the UP by Jawbone (which has since liquidated), and the FitBit Charge2. None of these had undergone reliability testing, and the Withings Sleep device was not available at the time of the review (the most similar device was the Beddit3, which was also not validated).
+
+### Jawbone UP
+
+A validation study of the Jawbone UP by [de Zambotti et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4780439/) found that the device had high sensitivity for detecting sleep ($97\%$) and low specificity for detecting wake ($37\%$), and it overestimated total sleep time ($26.6 \pm 35.3 \min$). [Gruwez et al.](https://www.ncbi.nlm.nih.gov/pubmed/28495352) reported that measurments of total sleep time correlated at $r=0.63$, but did not correlate with measurements of deep sleep, light sleep, or sleep efficiency. Jawbone ceased production in 2016, and has since gone out of business and liquidated.
+
+### FitBit Charge 2
+
+A validation study of the FitBit Charge2 by [de Zambotti et al.](https://www.ncbi.nlm.nih.gov/pubmed/29235907) looked at 44 adults, and reported $96\%$ sensitivity (accuracy to detect sleep), $61\%$ specificity (accuracy to detect wake), $81\%$ accuracy in detecting light sleep, $49\%$ accuracy in detecting deep sleep, and $74\%$ accuracy in detecting REM sleep. It overestimated total sleep by $9 \min$, overestimated light sleep by $34 \min$, and underestimated deep sleep by $24 \min$. Times in REM sleep appeared accurate. The author's conclusion was that:
+
+>Fitbit Charge 2™ shows promise in detecting sleep-wake states and sleep stage composition relative to gold standard PSG, particularly in the estimation of REM sleep, but with limitations in deep sleep detection.
+
+
+### Oura Ring
+
+Oura currently markets itself as "the most accurate sleep and activity tracker," though the basis of this claim is not clear. A validation study of the Oura Ring by [de Zambotti et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6095823/) looked at $41$ people, and reported agreement in the total sleep time, sleep latency onset, and wake after sleep onset (all within $\leq 30 \min$. It had high sensitivity for detecting sleep ($0.96$), but low sensitivity for detecting light sleep ($65\%$), deep sleep ($51\%$), and REM sleep ($61\%$), and poor specificity for detecting wake ($48\%$). It was found to underestimate deep sleep by $\sim 20 \min$, and overestimate REM by $\sim 17 \min$. 
+
+<!-- However, a 2019 blog article by [The Skeptical Cardiologist](https://theskepticalcardiologist.com/2019/02/09/the-oura-ring-for-personal-sleep-analysis-lots-of-hype-and-data-little-science-utility-or-accuracy/) used the author's personal data to argue that the Oura Ring was "lots of hype and data, little science, utility or accuracy," and "virtually useless in telling you if you are in REM sleep versus deep or light sleep." He claimed consistent overestimation of his awake time, and little correlation between his subjective feeling compared to the sleep score. His final recommendation was this: -->
+
+<!-- >If you are hoping to get improved analysis of your sleep quality I don’t think Oura adds anything to what is elsewhere available using cheaper wrist actigraphy devices. ... The ring is best I would say for well-heeled, self-hacking and self-experimenting techno geeks. -->
+
+## Expected values
+
+How much sleep is normal, and how is it divided across sleep states? According to the [National Sleep Foundation](https://www.sleephealthjournal.org/article/S2352-7218(15)00015-7/fulltext), a typical adult is recommended between 7-9 hours of sleep (420-540 minutes), though 6-10 hours (360-600 minutes) may be appropriate. [Merica and Gaillard](https://academic.oup.com/sleep/article/8/3/261/2751161) (1985) studied 147 adults with no known pathology for a total of 399 nights of sleep, in order to provide an accurate description of the amount of time spent in each sleep cycle. The sleep stages, at that time, were divided into 5 stages (stage 1-4 non-REM, and REM). Today, stages 3 & 4 are usually combined, as follows:
+
+* Stage 1 is the transition period between wakefulness and sleep.
+* Stage 2 is when sleep spindles occur. People spend around 50% of their total sleep in this stage.
+* Stage 3 & 4 is deep, slow wave (delta) sleep.
+* PS is paradoxical sleep, or REM sleep.
+
+
+A brief summary of their results is tabulated below:
+
+```{r, echo = F}
+# load packages
+require(readxl, quietly = T)
+require(kableExtra, quietly = T)
+require(gridExtra, quietly = T)
+
+merica <- read_xlsx("~/Boxcryptor/Dropbox (Personal)/merica sleep stages 2.xlsx", na = "")
+merica$tracker.stage[is.na(merica$tracker.stage)] <- ""
+merica[,-c(2,3,4,7)] %>% 
+  kable(digits = 1) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = F,
+                position = "center",
+                fixed_thead = T) %>%
+  pack_rows("total sleep", 1, 1, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("light sleep", 2, 4, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("deep sleep", 5, 7, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("rem sleep", 8, 8, label_row_css = "background-color: #666; color: #fff;") 
+  
+```
+
+
+
+
+```{r, echo = F}
+# load data and custom functions
+source("myfunctions.R")
+filename <- "/Users/nick/Dropbox (Personal)/sleep tracker comparison.xlsx"
+
+# import data
+df <- import_data(filename) 
+```
+
+
+# Methods
+
+Data was taken from a single subject for `r as.numeric(df$date[length(df$date)] -df$date[1]) +1` nights between `r df$date[1]` and `r df$date[length(df$date)]`, at a single location. Data was recorded simultaneously using the Fitbit Charge 3, Oura Ring and Withings Sleep monitor. The Fitbit was only included in the study 2 weeks after it began -- it therefore has fewer recordings than the other devices.
+
+If sleep trackers are accurate, they should produce similar values for each of the sleep states. In order to test the hypothesis that all 3 devices produce similar values, we compared average measurements of deep sleep, REM sleep, light sleep, and total sleep, using a linear mixed effect model (in the `lmerTest` R package). We performed all post-hoc pairwise comparisons based on this model using the `emmeans` package, and corrected for multiple testing by controlling the false discovery rate.
+
+It is possible for the values produced by different devices to disagree on average, yet still provide useful information. For example, a device can underestimate total sleep, but if it is off by a consistent amount then the relative ranking of times should remain the same. However, if the rankings between devices are different (i.e. statistically independent), then the devices cannot claim to reliably measure a particular quantity.  In order to test the hypothesis of statistical independence, we computed the Spearman rank correlation between measurements from different devices. 
+
+
+<!-- ```{r} -->
+<!-- df %>% -->
+<!--   kable() %>% -->
+<!--   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), -->
+<!--                 full_width = F, -->
+<!--                 position = "center", -->
+<!--                 fixed_thead = T) -->
+<!-- ``` -->
+
+
+
+# Results
+
+
+
+```{r, warning=F, message=F, echo = F, fig.height=7}
+sleepvars <- c("total", "light", "deep", "rem")
+boxes <- list() # boxplots
+
+for(vars in sleepvars){
+  yvar <- paste(vars, "oura", sep=".")
+  xvar <- paste(vars, "withings", sep=".")
+  zvar <- paste(vars, "fitbit", sep=".")
+  yvec <- df[[yvar]]
+  xvec <- df[[xvar]]
+  zvec <- df[[zvar]]
+  boxes[[vars]] <- boxplot.triple(zvec, 
+                                  yvec, 
+                               xvec, 
+                               ztitle = "Fitbit",
+                               ytitle = "Oura", 
+                               xtitle = "Withings", 
+                               main = paste(vars, "sleep"),
+                               normalmean = merica$mean[merica$tracker.stage == vars],
+                               normalsd = merica$sd[merica$tracker.stage == vars])
+  require(emmeans, quietly = T)
+  boxes[[vars]][["posthoc"]] <- emmeans(boxes[[vars]]$lmer, 
+                                        list(pairwise ~ variable), 
+                                        adjust = "none")
+  
+  # alternatively
+  # require(multcomp, quietly = T)
+  # boxes[[vars]][["posthoc"]] <- summary(glht(boxes[[vars]]$lmer, 
+  #                                            linfct = mcp(variable = "Tukey")), 
+  #                                            test = adjusted("holm"))
+}
+```
+
+
+
+## Raw data
+
+We show the raw in the figures below. Normal ranges as measured by Merica and Gaillard (1985) are shown by the grey-shaded areas and red lines, where the solid line is the normal mean, and the shaded regions/dashed lines are 1 and 1.96 times the normal standard deviation away.
+
+```{r, warning=F, message=F, echo = F, fig.height=8}
+# box plots
+box.ggplots <- lapply(boxes, function(this_box) this_box[["fig"]])
+do.call("grid.arrange", c(box.ggplots, ncol=floor(sqrt(length(box.ggplots)))))
+```
+
+## Linear mixed-effect model
+
+### Pairwise comparisons
+
+We modeled the data using a linear mixed effect model, with a random intercept for each night of sleep. We computed statistical significance for pairwise comparisons between devices by applying the `emmeans` package to the linear mixed effect model. Nominal p-values were adjusted to Benjamini-Hochberg q-values in order to control the false discovery rate. Results with $q<0.05$, corresponding to a 5\% false discovery rate, are shown in red.
+
+```{r, warning=F, message=F, echo = F, fig.height=7}
+diffslist <- list()
+for(vars in sleepvars){
+  diffslist[[vars]] <- as.data.frame(boxes[[vars]]$posthoc$`pairwise differences of variable`)
+  diffslist[[vars]][["measurement"]] <- vars
+}
+diffstable <- do.call(rbind,diffslist)
+rownames(diffstable) <- NULL
+diffstable$q.value <- signif(p.adjust(diffstable$p.value, "BH"), 3)
+
+require(dplyr, quietly = T)
+diffstable[,which(colnames(diffstable) != c("measurement")) ] %>% 
+
+  kable(format = "html", escape = F, digits = c(1,1,1,1,2,4,200)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = F,
+                position = "center",
+                fixed_thead = T) %>%
+  row_spec(which(diffstable$q.value < 0.05), bold = T, color = "red") %>%
+  pack_rows("total sleep", 1, 3, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("light sleep", 4, 6, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("deep sleep", 7, 9, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("rem sleep", 10, 12, label_row_css = "background-color: #666; color: #fff;")
+
+```
+
+
+
+### Device averages
+
+From the linear mixed effect model, we computed estimated marginal means for each device, along with standard errors, and 95\% confidence intervals.
+
+```{r, warning=F, message=F, echo = F, fig.height=7}
+emmeanslist <- list()
+for(vars in sleepvars){
+  emmeanslist[[vars]] <- as.data.frame(boxes[[vars]]$posthoc$`emmeans of variable`)
+  emmeanslist[[vars]][["measurement"]] <- vars
+}
+emmeanstable <- do.call(rbind,emmeanslist)
+rownames(emmeanstable) <- NULL
+colnames(emmeanstable)[1] <- c("device")
+
+emmeanstable[,which(colnames(emmeanstable) != c("measurement")) ] %>% 
+  kable(digits = c(1,1,1,1,1,1)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = F,
+                position = "center",
+                fixed_thead = T) %>%
+  pack_rows("total sleep", 1, 3, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("light sleep", 4, 6, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("deep sleep", 7, 9, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("rem sleep", 10, 12, label_row_css = "background-color: #666; color: #fff;")
+
+
+```
+
+## Device correlations
+
+We computed the Spearman rank correlation between each pair of devices. We corrected for multiple testing by controlling the false discovery rate. Correlation coefficients with $q<0.05$, corresponding to a 5\% false discovery rate, are shown in red.
+
+### Table
+
+```{r, echo = F, message=F, warning=F}
+require(psych, quietly = T)
+dflist <- list()
+for(vars in sleepvars){
+  yvar <- paste(vars, "oura", sep=".")
+  xvar <- paste(vars, "withings", sep=".")
+  zvar <- paste(vars, "fitbit", sep=".")
+  this_df <- df[,c(xvar, yvar, zvar)]
+  
+  cor.matrix <- corr.test(df[,c(xvar, yvar, zvar)], use = "p", method = "spearman", adjust = "BH")
+  
+  dflist[[vars]] <- data.frame(cor = cor.matrix$r[lower.tri(cor.matrix$r)],
+             p = cor.matrix$p[lower.tri(cor.matrix$p)],
+             var = c(vars, vars, vars),
+             row = c(yvar, zvar, zvar),
+             col = c(xvar, xvar, yvar))
+  # print(corrplot(cor.matrix$r, p.mat = cor.matrix$p, insig = "p-value", method = "ellipse", type = "upper", diag = F))
+}
+
+require(stringr)
+dfrbind <-do.call(rbind, dflist)
+dfrbind$row <- sapply(str_split(dfrbind$row, "[.]"), function(x) x[2])
+dfrbind$col <- sapply(str_split(dfrbind$col, "[.]"), function(x) x[2])
+dfrbind$q <- p.adjust(dfrbind$p, method = "BH")
+dfrbind$qvalue <- signif(dfrbind$q, 2)
+cortable <- dfrbind[, c("cor", "qvalue", "var", "row", "col")]
+rownames(cortable) <- NULL
+
+
+cortable[,-3] %>% 
+  kable(digits = c(3,10^16,1,1,1)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"),
+                full_width = F,
+                position = "center",
+                fixed_thead = T) %>%
+  row_spec(which(cortable$qvalue < 0.05), bold = T, color = "red") %>%
+  pack_rows("total sleep", 1, 3, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("light sleep", 4, 6, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("deep sleep", 7, 9, label_row_css = "background-color: #666; color: #fff;") %>%
+  pack_rows("rem sleep", 10, 12, label_row_css = "background-color: #666; color: #fff;")
+```
+
+
+### Plots
+
+```{r, warning=F, message=F, results = "asis", echo = F}
+require(corrplot, quietly = T)
+require(psych, quietly = T)
+require(GGally, quietly = T)
+require(pheatmap, quietly = T)
+
+
+
+
+# plot function for GGally
+lowerFn <- function(data, mapping, method = "lm", ...) {
+  p <- ggplot(data = data, mapping = mapping) +
+    geom_point(colour = "black") +
+    geom_smooth(method = method, color = "red", ...) +
+    geom_abline(slope = 1, intercept = 0, lty = 2, color = "black")
+    #coord_fixed(ratio = 1)
+  p  
+}
+diagFn <- function(data, mapping, ...) {
+  p <- ggplot(data = data, mapping = mapping) +
+    geom_density(fill = "grey") 
+}
+
+for(vars in sleepvars){
+  yvar <- paste(vars, "oura", sep=".")
+  xvar <- paste(vars, "withings", sep=".")
+  zvar <- paste(vars, "fitbit", sep=".")
+  this_df <- df[,c(xvar, yvar, zvar)]
+  
+  cat(paste("###", vars, "sleep", "\n\n"))
+  
+  print(ggpairs(this_df, 
+                diag = list(continuous=wrap(diagFn)),
+                lower=list(continuous= wrap(lowerFn, method = "lm")), 
+                upper = list( continuous = wrap('cor', method = "spearman")), 
+                ) + theme_classic()
+        )
+  
+  cat("\n\n")
+  
+  # cor.matrix <- corr.test(df[,c(xvar, yvar, zvar)], use = "p", method = "spearman", adjust = "none")
+  # 
+  # print(corrplot(cor.matrix$r, p.mat = cor.matrix$p, insig = "p-value", method = "ellipse", type = "upper", diag = F))
+}
+
+
+
+
+
+
+```
+
+
+
+<!-- ## Bland-Altman analysis -->
+
+<!-- We used Bland-Altman analysis of the differences to compute limits of agreement (LOA). The Bland-Altman plot shows the mean of two measurments plotted against their difference. 95% Limits of agreement are defined by $\mu \pm 1.96\sigma$, where $\mu$ is the average difference, and $\sigma$ is the standard deviation of the differences.  -->
+
+<!-- ```{r, warning=F, echo = F, fig.height=7} -->
+<!-- sleepvars <- c("total", "light", "deep", "rem") -->
+<!-- ba <- list() # bland altman -->
+<!-- for(vars in sleepvars){ -->
+<!--   yvar <- paste(vars, "oura", sep=".") -->
+<!--   xvar <- paste(vars, "withings", sep=".") -->
+<!--   yvec <- df[[yvar]] -->
+<!--   xvec <- df[[xvar]] -->
+<!--   ba[[vars]] <- blandaltman(yvec, xvec, main = paste(vars, "sleep")) -->
+<!-- } -->
+
+<!-- ba.results <- do.call(rbind, lapply(ba, function(this_ba) data.frame( -->
+<!--                                         mean.dev = this_ba[["mu"]],  -->
+<!--                                         SE.mean = this_ba[["s"]]/sqrt(nrow(df)), -->
+<!--                                         std.dev = this_ba[["s"]],  -->
+<!--                                         LOA.lower = this_ba[["LOA"]][1], -->
+<!--                                         LOA.upper = this_ba[["LOA"]][2]) -->
+<!-- )) -->
+
+
+<!-- # bland-altman plots -->
+<!-- ba.ggplots <- lapply(ba, function(this_ba) this_ba[["fig"]]) -->
+<!-- do.call("grid.arrange", c(ba.ggplots, ncol=floor(sqrt(length(ba.ggplots))))) -->
+
+<!-- # bland-altman table -->
+<!-- ba.results %>%  -->
+<!--   kable() %>% -->
+<!--   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), -->
+<!--                 full_width = F, -->
+<!--                 position = "center", -->
+<!--                 fixed_thead = T) -->
+<!-- ``` -->
+
+
+<!-- ## Total Least-Squares Regression -->
+
+<!-- We used total least-squares regression to estimate the slope and intercept. -->
+
+<!-- ```{r, warning=F, echo = F, fig.height=7} -->
+<!-- sleepvars <- c("total", "light", "deep", "rem") -->
+<!-- tls <- list() # tls regression -->
+<!-- for(vars in sleepvars){ -->
+<!--   yvar <- paste(vars, "oura", sep=".") -->
+<!--   xvar <- paste(vars, "withings", sep=".") -->
+<!--   yvec <- df[[yvar]] -->
+<!--   xvec <- df[[xvar]] -->
+<!--   tls[[vars]] <- tlsregression(yvec, xvec,  -->
+<!--                                ytitle = "Oura",  -->
+<!--                                xtitle = "Withings",  -->
+<!--                                nboot = 1000,  -->
+<!--                                nlattice = 100, -->
+<!--                                main = paste(vars, "sleep")) -->
+<!-- } -->
+
+<!-- tls.results <- do.call(rbind, lapply(tls, function(this_tls) data.frame( -->
+<!--                                         slope = as.numeric(this_tls[["estimate"]][1]),  -->
+<!--                                         slope.95lower = as.numeric(this_tls[["ci"]][1,1]), -->
+<!--                                         slope.95upper = as.numeric(this_tls[["ci"]][2,1]), -->
+<!--                                         intercept = as.numeric(this_tls[["estimate"]][2]), -->
+<!--                                         intercept.95lower = as.numeric(this_tls[["ci"]][1,2]), -->
+<!--                                         intercept.95upper = as.numeric(this_tls[["ci"]][2,2]) -->
+<!-- ) -->
+<!-- )) -->
+
+
+<!-- # tls plots -->
+<!-- tls.ggplots <- lapply(tls, function(this_tls) this_tls[["fig"]]) -->
+<!-- do.call("grid.arrange", c(tls.ggplots, ncol=floor(sqrt(length(tls.ggplots))))) -->
+
+<!-- # tls table -->
+<!-- tls.results %>%  -->
+<!--   kable() %>% -->
+<!--   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), -->
+<!--                 full_width = F, -->
+<!--                 position = "center", -->
+<!--                 fixed_thead = T) -->
+<!-- ``` -->
+
+
+
+
+# Discussion
+
+## Observed values 
+
+We found significant disagreement in the measurements of deep and REM sleep. The Oura Ring measures less deep sleep than the Withings Sleep, and measures more REM sleep than the Withings. Compared to the normal ranges reported by Merica, the Oura's measurment of REM sleep is unreasonably high, with most nights falling above 2 standard deviations. Similarly, the Oura's measurement of deep sleep is unreasonably low, with almost all measurements at least 1 standard deviation below normal. The Withings measurements are much more reasonable, producing values that are most often within 1 standard deviation of the normal.
+
+
+## Data Access
+
+An important question for users wanting to analyze their own data: how easy is it to download my data? For example, in preparing this article, it would have been very helpful to have been able to grab my data directly from their servers via R using each device's API. The APIs, however, require registration of an app (it assumes you are developing), and a callback URL to a server so that it can asynchronously return data to you. Using the API, therefore, requires a higher level of development than is practical for a single user. The alternative involves going to each device's web portal, and downloading the data via options there. 
+
+In the case of the Withings Sleep, a few clicks requests all your data in the form of csv files, and an email quickly follows with a link to download all your data. The data that arrives is detailed -- one of the csv files allows you to retrieve minute-to-minute estimates of heart rate, respiratory rate, and sleep state, while another csv allows you a simpler table of time spent in each sleep state (like that used in this article).
+
+In the case of the Oura Ring, a few clicks downloads all your data in the form of a JSON file. Oura reports minute-by-minute activity levels in metabolic-equivalent minutes, and heart rates and hypnogram categories computed for 5-minute epochs. It's 
+
+
+## Return Policies
+
+Both Oura Ring's [return policy](https://ouraring.com/returns/) and Withing's [return policy](https://support.withings.com/hc/en-us/articles/217687768-Withings-Webstore-Europe-I-am-not-satisfied-with-my-order-What-should-I-do-) state that the products can be returned for any reason within 30 days of receipt for a full refund.
