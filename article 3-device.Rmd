@@ -318,7 +318,7 @@ for(vars in sleepvars){
   zvar <- paste(vars, "fitbit", sep=".")
   this_df <- df[,c(xvar, yvar, zvar)]
   
-  cat(paste("###", vars, "sleep", "\n\n"))
+  cat(paste("####", vars, "sleep", "\n\n"))
   
   print(ggpairs(this_df, 
                 diag = list(continuous=wrap(diagFn)),
@@ -430,20 +430,10 @@ for(vars in sleepvars){
 
 # Discussion
 
-## Observed values 
 
-We found significant disagreement in the measurements of deep and REM sleep. The Oura Ring measures less deep sleep than the Withings Sleep, and measures more REM sleep than the Withings. Compared to the normal ranges reported by Merica, the Oura's measurment of REM sleep is unreasonably high, with most nights falling above 2 standard deviations. Similarly, the Oura's measurement of deep sleep is unreasonably low, with almost all measurements at least 1 standard deviation below normal. The Withings measurements are much more reasonable, producing values that are most often within 1 standard deviation of the normal.
+We found significant disagreements in nearly all comparisons between sleep trackers, but particularly large disagreements in the measurements of deep and REM sleep. The Oura Ring measures significantly less deep sleep than the other devices, and significantly more REM sleep than the other devices. Compared to the normal ranges reported by Merica, the Oura's measurment of REM sleep is unreasonably high (beyond 1 standard deviation), and its measurement of deep sleep is unreasonably low (beyond 1 standard deviation). The Withings measurements were most reasonable in the context of Merica's data.
 
+While it is important that a device produces measurements that lie within a reasonable range, it is more important that the relative ranking of measurements holds between devices -- if it doesn't, then it is hard to claim that any of the measurements have meaning or contain usable information. We looked for rank correlations between each pairing of devices and found that all three devices were highly correlated in predicting total sleep. The correlations fell drastically in all other measurements -- the Withings and Oura had moderate correlation in light sleep and REM sleep, but none of the devices produced correlated measurements for deep sleep. 
 
-## Data Access
+From this we conclude that the only meaningful measurement from these 3 devices is total sleep time. None of the devices are able to reproduce measures of deep sleep, and the measurements for REM sleep were only mildly reproducible. We found the Withings and the Oura were mildly correlated with each other across all categories but deep sleep, while the Fitbit was not correlated with the others. We therefore recommend these sleep trackers for users interested in tracking total sleep time, but find significant room for improvement in the algorithms tracking all other sleep stages. 
 
-An important question for users wanting to analyze their own data: how easy is it to download my data? For example, in preparing this article, it would have been very helpful to have been able to grab my data directly from their servers via R using each device's API. The APIs, however, require registration of an app (it assumes you are developing), and a callback URL to a server so that it can asynchronously return data to you. Using the API, therefore, requires a higher level of development than is practical for a single user. The alternative involves going to each device's web portal, and downloading the data via options there. 
-
-In the case of the Withings Sleep, a few clicks requests all your data in the form of csv files, and an email quickly follows with a link to download all your data. The data that arrives is detailed -- one of the csv files allows you to retrieve minute-to-minute estimates of heart rate, respiratory rate, and sleep state, while another csv allows you a simpler table of time spent in each sleep state (like that used in this article).
-
-In the case of the Oura Ring, a few clicks downloads all your data in the form of a JSON file. Oura reports minute-by-minute activity levels in metabolic-equivalent minutes, and heart rates and hypnogram categories computed for 5-minute epochs. It's 
-
-
-## Return Policies
-
-Both Oura Ring's [return policy](https://ouraring.com/returns/) and Withing's [return policy](https://support.withings.com/hc/en-us/articles/217687768-Withings-Webstore-Europe-I-am-not-satisfied-with-my-order-What-should-I-do-) state that the products can be returned for any reason within 30 days of receipt for a full refund.
